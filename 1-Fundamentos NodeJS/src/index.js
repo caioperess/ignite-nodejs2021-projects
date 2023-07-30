@@ -1,0 +1,151 @@
+const express = require("express");
+const { v4: uuidV4 } = require("uuid");
+
+const app = express();
+app.use(express.json());
+/**
+ * Represents a user object.
+ *
+ * @typedef {Object} Customer
+ * @property {string} id
+ * @property {string} name
+ * @property {number} cpf
+ * @property {[]} statement
+ */
+
+/**
+ * Represents a list of Customers.
+ *
+ * @type {Customer[]}
+ */
+const customers = [];
+
+function verifyIfExistsAccountCPF(req, res, next) {
+  const { cpf } = req.headers;
+
+  const customer = customers.find((customer) => customer.cpf === cpf);
+
+  if (!customer) {
+    return res.status(404).json({ error: "Customer not found!" });
+  }
+
+  req.customer = customer;
+
+  return next();
+}
+
+function getBalance(statement) {
+  const balance = statement.reduce((acc, currentStatement) => {
+    if (currentStatement.type === "credit") {
+      return acc + currentStatement.amount;
+    }
+
+    return acc - currentStatement.amount;
+  }, 0);
+
+  return balance;
+}
+
+app.post("/account", (req, res) => {
+  const { cpf, name } = req.body;
+
+  const customerAlreadyExists = customers.some(
+    (customer) => customer.cpf === cpf
+  );
+
+  if (customerAlreadyExists) {
+    return res.status(400).json({ error: "Customer already exists!" });
+  }
+
+  customers.push({ id: uuidV4(), cpf, name, statement: [] });
+
+  return res.status(201).send();
+});
+
+app.get("/statement", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+  return res.json(customer.statement);
+});
+
+app.post("/deposit", verifyIfExistsAccountCPF, (req, res) => {
+  const { description, amount } = req.body;
+  const { customer } = req;
+
+  const statementOperation = {
+    description,
+    amount,
+    createdAt: new Date(),
+    type: "credit",
+  };
+
+  customer.statement.push(statementOperation);
+
+  return res.status(201).send();
+});
+
+app.post("/withdraw", verifyIfExistsAccountCPF, (req, res) => {
+  const { amount } = req.body;
+  const { customer } = req;
+
+  const balance = getBalance(customer.statement);
+
+  if (amount > balance) {
+    return res.status(400).json({ error: "Insufficient funds!" });
+  }
+
+  const statementOperation = {
+    amount,
+    createdAt: new Date(),
+    type: "withdraw",
+  };
+
+  customer.statement.push(statementOperation);
+
+  return res.status(201).send();
+});
+
+app.get("/statement/date", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+  const { date } = req.query;
+
+  const dateFormat = new Date(date + " 00:00");
+
+  const statement = customer.statement.filter(
+    (statement) =>
+      statement.createdAt.toDateString() === new Date(dateFormat).toDateString()
+  );
+
+  return res.json(statement);
+});
+
+app.put("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { name } = req.body;
+  const { customer } = req;
+  customer.name = name;
+
+  return res.status(201).send();
+});
+
+app.get("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+
+  return res.status(200).json(customer);
+});
+
+app.delete("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+
+  customers.splice(customer, 1);
+
+  return res.status(200).json(customers);
+});
+
+app.get("/balance", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+
+  const balance = getBalance(customer.statement);
+
+  return res.status(200).json(balance);
+});
+
+app.listen(8080, () => console.log("API running on port 8080 🚀"));
