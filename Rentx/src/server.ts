@@ -1,12 +1,14 @@
 import 'reflect-metadata';
 
 import express from 'express';
+import path from 'path';
 import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 import './shared/container';
 
 import { ConnectDB } from './database';
 import { router } from './routes';
-import swaggerFile from './swagger.json';
+const swaggerFile = YAML.load(path.resolve(__dirname, './swagger.yml'));
 
 ConnectDB();
 const app = express();
