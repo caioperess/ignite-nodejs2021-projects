@@ -1,12 +1,12 @@
-FROM node:18
+FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /src
 
-COPY package.json ./
+ADD package.json /src
 
-RUN npm install 
+RUN npm install && npm cache clean --force
 
-COPY . . 
+ADD . /src 
 
 EXPOSE 3333
 

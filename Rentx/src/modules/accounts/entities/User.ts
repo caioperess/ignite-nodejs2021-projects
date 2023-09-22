@@ -9,6 +9,9 @@ export class User {
   name: string;
 
   @Column()
+  avatar: string;
+
+  @Column()
   isAdmin: boolean;
 
   @Column()

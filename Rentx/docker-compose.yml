@@ -14,19 +14,22 @@ services:
     volumes:
       - pgdata:/data/postgres
   app:
-    build:
+    build: 
       context: .
       dockerfile: Dockerfile
     container_name: rentx
+    command: npm run dev
     ports:
       - 3333:3333
     volumes:
-      - .:/app
+      - .:/src/
+      - nodemodules:/src/node_modules
     links:
       - database
     depends_on:
       - database
 
 volumes:
+  nodemodules: {}
   pgdata:
     driver: local
