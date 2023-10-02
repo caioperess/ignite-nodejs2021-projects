@@ -3,10 +3,13 @@ import path from 'node:path';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
-import { AppErrorHandler } from './middlewares/errorHandler';
+import { AppErrorHandler } from '@shared/infra/http/middlewares/errorHandler';
+
 import { router } from './routes';
 
-const swaggerFile = YAML.load(path.resolve(__dirname, './swagger.yml'));
+const swaggerFile = YAML.load(
+  path.resolve(__dirname, '..', '..', '..', './swagger.yml'),
+);
 
 class App {
   public server: Express;

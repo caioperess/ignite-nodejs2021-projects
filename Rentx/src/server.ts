@@ -2,8 +2,9 @@ import 'express-async-errors';
 import 'reflect-metadata';
 import './shared/container';
 
-import app from './app';
-import { ConnectDB } from './database';
+import { ConnectDB } from '@shared/infra/typeorm';
+
+import app from './shared/infra/http/app';
 
 ConnectDB();
 

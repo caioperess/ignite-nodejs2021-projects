@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { ICreateUserDTO } from '../../dtos/ICreateUserDTO';
+import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
+
 import { CreateUserUseCase } from './CreateUserUseCase';
 
 export class CreateUserController {
