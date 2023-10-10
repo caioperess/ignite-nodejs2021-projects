@@ -6,6 +6,6 @@ import { ConnectDB } from '@shared/infra/typeorm';
 
 import app from './shared/infra/http/app';
 
-ConnectDB();
+ConnectDB('database_ignite');
 
 app.listen(3333, () => console.log('Server running on port 3333'));
