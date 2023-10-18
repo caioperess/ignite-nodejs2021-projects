@@ -16,6 +16,10 @@ export class CarsRepository implements ICarsRepository {
     this.repository = AppDataSource.getRepository(Car);
   }
 
+  async findById(id: string): Promise<Car> {
+    return this.repository.findOne({ where: { id } });
+  }
+
   async findByLicensePlate(license_plate: string): Promise<Car> {
     return await this.repository.findOne({ where: { license_plate } });
   }

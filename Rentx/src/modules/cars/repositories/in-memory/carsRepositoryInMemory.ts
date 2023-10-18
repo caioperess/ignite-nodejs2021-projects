@@ -14,6 +14,12 @@ export class CarsRepositoryInMemory implements ICarsRepository {
     return car;
   }
 
+  async findById(id: string): Promise<Car> {
+    const car = this.cars.find((car) => car.id === id);
+
+    return car;
+  }
+
   async listAvailable({
     brand,
     category_id,
@@ -39,10 +45,10 @@ export class CarsRepositoryInMemory implements ICarsRepository {
     const car = new Car();
 
     Object.assign(car, {
-      ...data,
       id: uuidV4(),
       created_at: new Date(),
       available: true,
+      ...data,
     });
 
     this.cars.push(car);

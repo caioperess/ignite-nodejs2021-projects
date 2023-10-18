@@ -9,6 +9,7 @@ export interface IListAvailableRequest {
 
 export interface ICarsRepository {
   findByLicensePlate(license_plate: string): Promise<Car>;
+  findById(id): Promise<Car>;
   create(data: ICreateCarDTO): Promise<Car>;
   listAvailable(data: IListAvailableRequest): Promise<Car[]>;
   list(): Promise<Car[]>;
