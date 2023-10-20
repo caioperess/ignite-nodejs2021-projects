@@ -9,22 +9,22 @@ import { ListCategoriesController } from '@modules/cars/useCases/listCategories/
 import { ensureAdmin } from '../middlewares/ensureAdmin';
 import { ensureAuthenticated } from '../middlewares/ensureAuthenticated';
 
-const categorieRouter = Router();
+const categoriesRouter = Router();
 const upload = multer(uploadConfig.upload(''));
 
 const createCategoryController = new CreateCategoryController();
 const importCategoryController = new ImportCategoryController();
 const listCategoryController = new ListCategoriesController();
 
-categorieRouter.get('/', listCategoryController.handle);
+categoriesRouter.get('/', listCategoryController.handle);
 
-categorieRouter.use(ensureAuthenticated);
-categorieRouter.use(ensureAdmin);
-categorieRouter.post('/', createCategoryController.handle);
-categorieRouter.post(
+categoriesRouter.use(ensureAuthenticated);
+categoriesRouter.use(ensureAdmin);
+categoriesRouter.post('/', createCategoryController.handle);
+categoriesRouter.post(
   '/import',
   upload.single('file'),
   importCategoryController.handle,
 );
 
-export { categorieRouter };
+export { categoriesRouter };

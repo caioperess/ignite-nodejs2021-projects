@@ -1,17 +1,17 @@
 import { hash } from 'bcrypt';
 
-import { AppDataSource, ConnectDB } from '..';
+import { AppDataSource } from '..';
 
 import { v4 as uuidV4 } from 'uuid';
 
 async function create() {
-  await ConnectDB();
+  await AppDataSource.initialize();
 
   const id = uuidV4();
 
   const hashedPassword = await hash('admin', 8);
 
-  AppDataSource.query(
+  await AppDataSource.query(
     `INSERT INTO USERS(id,name,email,password,driver_license,"isAdmin",created_at) 
     values('${id}','admin','admin@email.com','${hashedPassword}','123456789',true,'now()')`,
   );
