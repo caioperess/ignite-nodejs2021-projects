@@ -10,9 +10,9 @@ let createRentalUseCase: CreateRentalUseCase;
 let rentalsRepositoryInMemory: RentalsRepositoryInMemory;
 let dayJsDateProvider: DayJsDateProvider;
 
-describe('Create Rental', () => {
-  const DatePlusOneDay = dayjs().add(1, 'day').toDate();
+const DatePlusOneDay = dayjs().add(1, 'day').toDate();
 
+describe('Create Rental', () => {
   beforeEach(() => {
     rentalsRepositoryInMemory = new RentalsRepositoryInMemory();
     dayJsDateProvider = new DayJsDateProvider();

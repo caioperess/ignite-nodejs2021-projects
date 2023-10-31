@@ -31,13 +31,13 @@ export class AuthenticateUserUseCase {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('Invalid user credencials!');
+      throw new AppError('Invalid user credentials!');
     }
 
     const isPasswordCorrect = await compare(password, user.password);
 
     if (!isPasswordCorrect) {
-      throw new AppError('Invalid user credencials!');
+      throw new AppError('Invalid user credentials!');
     }
 
     const token = sign({}, '02fce1296effc6f381a7de8abdac2e24', {

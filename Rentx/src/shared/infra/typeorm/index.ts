@@ -2,11 +2,11 @@ import { DataSource } from 'typeorm';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'database_ignite',
+  host: process.env.NODE_ENV === 'test' ? 'localhost' : 'database_ignite',
   port: 5432,
   username: 'docker',
   password: 'docker',
-  database: 'rentx',
+  database: process.env.NODE_ENV === 'test' ? 'rentx_test' : 'rentx',
   migrations: ['./src/shared/infra/typeorm/migrations/*.ts'],
   entities: ['./src/modules/**/entities/*.ts'],
 });
