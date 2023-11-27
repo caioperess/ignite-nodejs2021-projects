@@ -13,4 +13,5 @@ export interface ICarsRepository {
   create(data: ICreateCarDTO): Promise<Car>;
   listAvailable(data: IListAvailableRequest): Promise<Car[]>;
   list(): Promise<Car[]>;
+  updateAvailability(id: string, available: boolean): Promise<void>;
 }

@@ -13,6 +13,8 @@ paths:
         - Category
       summary: Create a category
       description: Create a new category
+      security:
+        - BearerAuth: []
       requestBody:
         content:
           application/json:
@@ -27,9 +29,9 @@ paths:
                 name: Category name sample
                 description: Category description sample
       responses:
-        "201":
+        '201':
           description: Created
-        "500":
+        '500':
           description: Category already exists
     get:
       tags:
@@ -37,7 +39,7 @@ paths:
       summary: List all categories
       description: List all categories
       responses:
-        "200":
+        '200':
           description: Success
           content:
             application/json:
@@ -53,7 +55,9 @@ paths:
   /categories/import:
     post:
       tags:
-        - "Category"
+        - 'Category'
+      security:
+        - BearerAuth: []
       summary: Upload a new category
       description: Uplaod a new category
       requestBody:
@@ -66,26 +70,104 @@ paths:
                   type: string
                   format: binary
       responses:
-        "201":
+        '201':
           description: Created
   /specifications:
     post:
       tags:
         - Specifications
+      security:
+        - BearerAuth: []
       summary: Create a specification
       description: Create a new specification
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Specification"
+              $ref: '#/components/schemas/Specification'
       responses:
-        "201":
+        '201':
           description: Created
-        "500":
+        '500':
           description: Specification already exists!
+  /sessions:
+    post:
+      tags:
+        - Sessions
+      summary: Authenticate user
+      description: Authenticate an user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Email or password incorrect!
+  /cars:
+    post:
+      tags:
+        - Cars
+      security:
+        - BearerAuth: []
+      summary: Create a new car
+      description: Create a new car
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+      responses:
+        201:
+          description: Created
+        400:
+          description: Car already exists
+  /cars/images/{id}:
+    post:
+      tags:
+        - Cars
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: String ID of the car to receive the images
+      summary: Upload images to a car
+      description: Upload images to a car
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        201:
+          description: Images uploaded
+        400:
+          description: Error
 
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+
   schemas:
     Specification:
       type: object
@@ -94,3 +176,24 @@ components:
           type: string
         description:
           type: string
+    Car:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        daily_rate:
+          type: number
+        license_plate:
+          type: string
+        fine_amount:
+          type: number
+        brand:
+          type: string
+        category_id:
+          type: string
+        id:
+          type: string
+        available:
+          type: boolean

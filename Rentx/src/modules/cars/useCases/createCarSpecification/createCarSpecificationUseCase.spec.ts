@@ -49,11 +49,11 @@ describe('Create Car Specification', () => {
     const car_id = '123';
     const specifications_id = ['1874'];
 
-    expect(async () => {
-      await createCarSpecificationUseCase.execute({
+    await expect(
+      createCarSpecificationUseCase.execute({
         car_id,
         specifications_id,
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      }),
+    ).rejects.toEqual(new AppError('Car not found!', 404));
   });
 });

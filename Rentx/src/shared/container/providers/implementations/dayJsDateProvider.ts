@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs, { ManipulateType } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 import { IDateProvider } from '../DateProvider/IDateProvider';
@@ -19,5 +19,16 @@ export class DayJsDateProvider implements IDateProvider {
     const startDateUTC = this.convertToUTC(startDate);
 
     return dayjs(endDateUTC).diff(startDateUTC, 'hours');
+  }
+
+  compareInDays(startDate: Date, endDate: Date): number {
+    const endDateUTC = this.convertToUTC(endDate);
+    const startDateUTC = this.convertToUTC(startDate);
+
+    return dayjs(endDateUTC).diff(startDateUTC, 'days');
+  }
+
+  addTime(days: number, unit: ManipulateType): Date {
+    return dayjs().add(days, unit).toDate();
   }
 }

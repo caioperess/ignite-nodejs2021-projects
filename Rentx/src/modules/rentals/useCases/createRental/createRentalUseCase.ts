@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
+import { ICarsRepository } from '@modules/cars/repositories/ICarsRepository';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalsRepository } from '@modules/rentals/repositories/IRentalsRepository';
@@ -10,15 +11,19 @@ import { AppError } from '@shared/errors/AppError';
 export class CreateRentalUseCase {
   private rentalsRepository: IRentalsRepository;
   private dateProvider: IDateProvider;
+  private carsRepository: ICarsRepository;
 
   constructor(
     @inject('RentalsRepository')
     rentalsRepository: IRentalsRepository,
     @inject('DateProvider')
     dateProvider: IDateProvider,
+    @inject('CarsRepository')
+    carsRepository: ICarsRepository,
   ) {
     this.rentalsRepository = rentalsRepository;
     this.dateProvider = dateProvider;
+    this.carsRepository = carsRepository;
   }
 
   async execute(data: ICreateRentalDTO): Promise<Rental> {
@@ -49,6 +54,8 @@ export class CreateRentalUseCase {
     }
 
     const rental = await this.rentalsRepository.create(data);
+
+    await this.carsRepository.updateAvailability(data.car_id, false);
 
     return rental;
   }
