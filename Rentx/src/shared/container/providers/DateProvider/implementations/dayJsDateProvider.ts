@@ -1,7 +1,7 @@
 import dayjs, { ManipulateType } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
-import { IDateProvider } from '../DateProvider/IDateProvider';
+import { IDateProvider } from '../IDateProvider';
 
 dayjs.extend(utc);
 
@@ -30,5 +30,12 @@ export class DayJsDateProvider implements IDateProvider {
 
   addTime(days: number, unit: ManipulateType): Date {
     return dayjs().add(days, unit).toDate();
+  }
+
+  compareIfBefore(startDate: Date, endDate: Date): boolean {
+    const endDateUTC = this.convertToUTC(endDate);
+    const startDateUTC = this.convertToUTC(startDate);
+
+    return dayjs(startDateUTC).isBefore(endDateUTC);
   }
 }

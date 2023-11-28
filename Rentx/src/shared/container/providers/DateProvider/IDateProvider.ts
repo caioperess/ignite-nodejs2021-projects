@@ -6,4 +6,5 @@ export interface IDateProvider {
   convertToUTC(date: Date): string;
   dateNow(): Date;
   addTime(time: number, unit: ManipulateType): Date;
+  compareIfBefore(startDate: Date, endDate: Date): boolean;
 }
