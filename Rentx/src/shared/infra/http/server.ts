@@ -1,4 +1,5 @@
 import { ConnectDB } from '@shared/infra/typeorm';
+import 'dotenv/config';
 
 import app from './app';
 
