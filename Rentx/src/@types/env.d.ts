@@ -4,6 +4,7 @@ import { IStorageProviderTypes } from 'constants/IStorageProvider';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      APP_PORT: string;
       CLIENT_URL: string;
       AWS_KEY: string;
       TOKEN_SECRET: string;
@@ -11,6 +12,7 @@ declare global {
       AWS_ACCESS_KEY_ID: string;
       AWS_SECRET_ACCESS_KEY: string;
       AWS_BUCKET: string;
+      AWS_BUCKET_URL: string;
       AWS_BUCKET_REGION: string;
       STORAGE: IStorageProviderTypes;
     }

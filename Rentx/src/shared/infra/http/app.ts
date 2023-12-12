@@ -7,6 +7,7 @@ import YAML from 'yamljs';
 
 import '../../container';
 
+import { uploadConfig } from '@config/upload';
 import { AppErrorHandler } from '@shared/infra/http/middlewares/errorHandler';
 
 import { router } from './routes';
@@ -26,6 +27,11 @@ class App {
     this.server.use(express.json());
     this.server.use(router);
     this.server.use(AppErrorHandler);
+    this.server.use(
+      '/avatar',
+      express.static(`${uploadConfig.tmpFolder}/avatar`),
+    );
+    this.server.use('/cars', express.static(`${uploadConfig.tmpFolder}/cars`));
     this.server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
   }
 }

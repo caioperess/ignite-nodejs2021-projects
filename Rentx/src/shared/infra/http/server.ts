@@ -5,4 +5,6 @@ import app from './app';
 
 ConnectDB();
 
-app.listen(3333, () => console.log('Server running on port 3333'));
+app.listen(process.env.APP_PORT, () =>
+  console.log(`Server running on port ${process.env.APP_PORT}`),
+);

@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('users')
@@ -25,4 +26,16 @@ export class User {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @Expose({ name: 'avatar_url' })
+  avatar_url(): string {
+    switch (process.env.STORAGE) {
+      case 'disk':
+        return `http://localhost:${process.env.APP_PORT}/avatar/${this.avatar}`;
+      case 'S3':
+        return `${process.env.AWS_BUCKET_URL}/avatar/${this.avatar}`;
+      default:
+        return null;
+    }
+  }
 }
